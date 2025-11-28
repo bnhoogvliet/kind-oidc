@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aws-cli-sa
+  namespace: default
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::852318003143:role/aws-cli-sa
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: aws-cli-pod-2
+  namespace: default
+spec:
+  serviceAccountName: aws-cli-sa
+  containers:
+    - name: aws-cli
+      image: amazon/aws-cli:2.14.6  # AWS CLI v2 pre-installed
+      command: ["/bin/sh", "-c", "--"]
+      args:
+        - tail -f /dev/null  # keep pod running for interactive use
+      env:
+        - name: AWS_REGION
+          value: eu-central-1
+
